@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
@@ -16,9 +16,16 @@
       background-color: #101010;
       color: white;
     }
+    #chatIcon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 10px;
+      align-self: center;
+    }
     #chat {
-      width: 300px;
-      height: 400px;
+      width: 100%;
+      max-width: 400px;
+      height: 600px;
       background-color: #1c1c1c;
       border-radius: 8px;
       padding: 10px;
@@ -33,7 +40,7 @@
       margin-bottom: 10px;
     }
     input {
-      width: 100%;
+      width: 90%;
       padding: 10px;
       border: none;
       border-radius: 4px;
@@ -54,6 +61,7 @@
 </head>
 <body>
   <div id="chat">
+    <img src="https://upload.wikimedia.org/wikipedia/pt/f/f9/Furia_Esports_logo.png" alt="FURIA" id="chatIcon" />
     <div id="messages"></div>
     <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
   </div>
@@ -65,8 +73,20 @@
     const botResponses = {
       "próximo jogo": "O próximo jogo da FURIA é contra a equipe XYZ, dia 25/04 às 18h.",
       "estatísticas": "Aqui estão as estatísticas mais recentes da FURIA...",
-      "dicas": "1. Fique atento aos movimentos do inimigo. 2. Use o mapa a seu favor. 3. Trabalhe em equipe!",
+      "dicas": [
+      "Fique atento aos movimentos do inimigo.",
+      "Use o mapa a seu favor.",
+      "Trabalhe em equipe!",
+      "Comunique-se sempre com sua equipe.",
+      "Não fique preso a uma área, mova-se com estratégia."
+    ],
     };
+
+    function getRandomTip() {
+      const tips = botResponses["dicas"];
+      const randomIndex = Math.floor(Math.random() * tips.length);
+      return tips[randomIndex];
+    }
 
     function appendMessage(text, sender) {
       const messageElement = document.createElement('div');
@@ -82,8 +102,13 @@
         appendMessage(userText, 'user');
         userInput.value = '';
         
-        // Bot response based on predefined messages
-        const botReply = botResponses[userText] || "Desculpe, não entendi. Tente 'próximo jogo', 'estatísticas' ou 'dicas'.";
+        let botReply = "";
+        if (userText === "dicas") {
+          botReply = getRandomTip();
+        } else {
+          botReply = botResponses[userText] || "Desculpe, não entendi. Tente 'próximo jogo', 'estatísticas' ou 'dicas'.";
+        }
+        
         setTimeout(() => appendMessage(botReply, 'bot'), 500);
       }
     }

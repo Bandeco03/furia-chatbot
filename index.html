@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot FURIA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #101010;
+      color: white;
+    }
+    #chat {
+      width: 300px;
+      height: 400px;
+      background-color: #1c1c1c;
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    #messages {
+      overflow-y: auto;
+      flex-grow: 1;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+    }
+    .message {
+      padding: 5px;
+      margin: 5px;
+      border-radius: 4px;
+      background-color: #333;
+    }
+    .bot {
+      background-color: #444;
+    }
+    .user {
+      background-color: #0066ff;
+    }
+  </style>
+</head>
+<body>
+  <div id="chat">
+    <div id="messages"></div>
+    <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
+  </div>
+
+  <script>
+    const messages = document.getElementById('messages');
+    const userInput = document.getElementById('userInput');
+
+    const botResponses = {
+      "próximo jogo": "O próximo jogo da FURIA é contra a equipe XYZ, dia 25/04 às 18h.",
+      "estatísticas": "Aqui estão as estatísticas mais recentes da FURIA...",
+      "dicas": "1. Fique atento aos movimentos do inimigo. 2. Use o mapa a seu favor. 3. Trabalhe em equipe!",
+    };
+
+    function appendMessage(text, sender) {
+      const messageElement = document.createElement('div');
+      messageElement.textContent = text;
+      messageElement.classList.add('message', sender);
+      messages.appendChild(messageElement);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function processMessage() {
+      const userText = userInput.value.trim().toLowerCase();
+      if (userText) {
+        appendMessage(userText, 'user');
+        userInput.value = '';
+        
+        // Bot response based on predefined messages
+        const botReply = botResponses[userText] || "Desculpe, não entendi. Tente 'próximo jogo', 'estatísticas' ou 'dicas'.";
+        setTimeout(() => appendMessage(botReply, 'bot'), 500);
+      }
+    }
+
+    userInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        processMessage();
+      }
+    });
+  </script>
+</body>
+</html>

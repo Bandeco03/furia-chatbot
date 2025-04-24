@@ -57,37 +57,81 @@
     .user {
       background-color: #0066ff;
     }
+    #inputArea {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    #quickButtons {
+      display: flex;
+      justify-content: space-between;
+      gap: 5px;
+    }
+    
+    .quick-btn {
+      flex: 1;
+      padding: 6px;
+      border: none;
+      border-radius: 5px;
+      background-color: #3b3b3b;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .quick-btn:hover {
+      background-color: #505050;
+    }
   </style>
 </head>
 <body>
   <div id="chat">
     <img src="https://upload.wikimedia.org/wikipedia/pt/f/f9/Furia_Esports_logo.png" alt="FURIA" id="chatIcon" />
     <div id="messages"></div>
-    <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
+    <div id="inputArea">
+      <div id="quickButtons">
+        <button type="button" class="quick-btn" onclick="sendQuick('próximo jogo')">Próximo Jogo</button>
+        <button type="button" class="quick-btn" onclick="sendQuick('estatísticas')">Estatísticas</button>
+        <button type="button" class="quick-btn" onclick="sendQuick('dicas')">Dicas</button>
+      </div>
+      <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
+    </div>
   </div>
+
 
   <script>
     const messages = document.getElementById('messages');
     const userInput = document.getElementById('userInput');
-
+  
     const botResponses = {
       "próximo jogo": "O próximo jogo da FURIA é contra a equipe XYZ, dia 25/04 às 18h.",
       "estatísticas": "Aqui estão as estatísticas mais recentes da FURIA...",
       "dicas": [
-      "Fique atento aos movimentos do inimigo.",
-      "Use o mapa a seu favor.",
-      "Trabalhe em equipe!",
-      "Comunique-se sempre com sua equipe.",
-      "Não fique preso a uma área, mova-se com estratégia."
-    ],
+        "Fique atento aos movimentos do inimigo.",
+        "Use o mapa a seu favor.",
+        "Trabalhe em equipe!",
+        "Comunique-se sempre com sua equipe.",
+        "Não fique preso a uma área, mova-se com estratégia."
+      ],
     };
-
+  
     function getRandomTip() {
       const tips = botResponses["dicas"];
       const randomIndex = Math.floor(Math.random() * tips.length);
       return tips[randomIndex];
     }
-
+  
     function appendMessage(text, sender) {
       const messageElement = document.createElement('div');
       messageElement.textContent = text;
@@ -95,27 +139,32 @@
       messages.appendChild(messageElement);
       messages.scrollTop = messages.scrollHeight;
     }
-
-    function processMessage() {
-      const userText = userInput.value.trim().toLowerCase();
+  
+    function processMessage(message) {
+      const rawInput = message.trim();
+      const userText = rawInput.toLowerCase();      
       if (userText) {
-        appendMessage(userText, 'user');
-        userInput.value = '';
-        
+        appendMessage(rawInput, 'user');
+  
         let botReply = "";
         if (userText === "dicas") {
           botReply = getRandomTip();
         } else {
           botReply = botResponses[userText] || "Desculpe, não entendi. Tente 'próximo jogo', 'estatísticas' ou 'dicas'.";
         }
-        
+  
         setTimeout(() => appendMessage(botReply, 'bot'), 500);
       }
     }
-
+  
+    function sendQuick(message) {
+      processMessage(message);
+    }
+  
     userInput.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
-        processMessage();
+        processMessage(userInput.value);
+        userInput.value = '';
       }
     });
   </script>

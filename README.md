@@ -30,7 +30,7 @@ Tudo organizado em **um único arquivo** `.html`.
 
 ### Ou
 
-1. Acesse o link: bandeco03.github.io/furia-chatbot/
+1. Acesse o link: [furia-chatbot](https://bandeco03.github.io/furia-chatbot/)
 2. Comece a usar o chat.
 
 Nenhuma instalação ou dependência externa necessária.

@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
@@ -23,9 +23,10 @@
       align-self: center;
     }
     #chat {
-      width: 100%;
+      width: 90%;
       max-width: 400px;
-      height: 600px;
+      height: 90%;
+      max-height: 600px;
       background-color: #1c1c1c;
       border-radius: 8px;
       padding: 10px;
@@ -44,11 +45,18 @@
       border: none;
       border-radius: 4px;
     }
+    
+    input[type="text"] {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
     .message {
       padding: 5px;
       margin: 5px;
       border-radius: 4px;
-      background-color: #333;
       word-wrap: break-word;
       overflow-wrap: break-word;
       white-space: pre-wrap;
@@ -64,21 +72,11 @@
       flex-direction: column;
       gap: 5px;
     }
-
-    input[type="text"] {
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      font-size: 16px;
-    }
-
     #quickButtons {
       display: flex;
       justify-content: space-between;
       gap: 5px;
     }
-    
     .quick-btn {
       flex: 1;
       padding: 6px;
@@ -90,9 +88,25 @@
       font-size: 14px;
       transition: background 0.2s;
     }
-
     .quick-btn:hover {
       background-color: #505050;
+    }
+    #inputWrapper {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      width: 100%;
+      gap: 5px;
+    }
+    #sendButton {
+      background: #0066ff;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
     }
   </style>
 </head>
@@ -106,14 +120,17 @@
         <button type="button" class="quick-btn" onclick="sendQuick('estatísticas')">Estatísticas</button>
         <button type="button" class="quick-btn" onclick="sendQuick('dicas')">Dicas</button>
       </div>
-      <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
+      <div id="inputWrapper">
+      	<input type="text" id="userInput" placeholder="Digite sua mensagem..." />
+        <button id="sendButton">▶</button>
+      </div>
     </div>
   </div>
-
 
   <script>
     const messages = document.getElementById('messages');
     const userInput = document.getElementById('userInput');
+    const sendButton = document.getElementById('sendButton');
   
     const botResponses = {
       "próximo jogo": "O próximo jogo da FURIA é contra a equipe XYZ, dia 25/04 às 18h.",
@@ -124,13 +141,12 @@
         "Trabalhe em equipe!",
         "Comunique-se sempre com sua equipe.",
         "Não fique preso a uma área, mova-se com estratégia."
-      ],
+      ]
     };
-  
+  	
     function getRandomTip() {
       const tips = botResponses["dicas"];
-      const randomIndex = Math.floor(Math.random() * tips.length);
-      return tips[randomIndex];
+      return tips[Math.floor(Math.random() * tips.length)];
     }
   
     function appendMessage(text, sender) {
@@ -140,12 +156,11 @@
       messages.appendChild(messageElement);
       messages.scrollTop = messages.scrollHeight;
     }
-  
+    
     function processMessage(message) {
-      const rawInput = message.trim();
-      const userText = rawInput.toLowerCase();      
+      const userText = message.trim().toLowerCase();      
       if (userText) {
-        appendMessage(rawInput, 'user');
+        appendMessage(message.trim(), 'user');
   
         let botReply = "";
         if (userText === "dicas") {
@@ -162,6 +177,12 @@
       processMessage(message);
     }
   
+    sendButton.addEventListener('click', function() {
+      processMessage(userInput.value);
+      userInput.value = '';
+      userInput.focus();
+    });
+
     userInput.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         processMessage(userInput.value);
